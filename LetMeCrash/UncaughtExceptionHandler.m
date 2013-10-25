@@ -59,15 +59,19 @@ const NSInteger UncaughtExceptionHandlerReportAddressCount = 5;
 
 - (void)validateAndSaveCriticalApplicationData
 {
-	
+    NSLog(@"set crash");
+	[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"CrashStatus"];
+    [[NSUserDefaults standardUserDefaults]synchronize];
 }
 
 - (void)handleException:(NSException *)exception
 {
 	[self validateAndSaveCriticalApplicationData];
 	
+    
     NSString *reason = [exception reason]; //key infomation
     NSDictionary *userInfo = [exception userInfo];
+    
     
 	UIAlertView *alert =[[UIAlertView alloc]initWithTitle:NSLocalizedString(@"發生未預期的錯誤", nil)
                                                    message:NSLocalizedString(@"請聯絡 http://xxx.yyy/bugreport \n並按離開關閉程式.", nil)

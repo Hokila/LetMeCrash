@@ -16,6 +16,7 @@
     //catch exception
     InstallUncaughtExceptionHandler();
     
+    [self checkCrashStatus];
     //Flurry 
     [Flurry startSession:@"JJMGZNWGMJ49SFDG35VP"];
     [Flurry setCrashReportingEnabled:YES];
@@ -23,7 +24,24 @@
     // Override point for customization after application launch.
     return YES;
 }
-							
+
+-(void)checkCrashStatus{
+    BOOL isJustCrash = [[NSUserDefaults standardUserDefaults] boolForKey:@"CrashStatus"];
+    
+    if (isJustCrash) {
+        UIAlertView *alert =[[UIAlertView alloc]initWithTitle:NSLocalizedString(@"我們發現app崩潰了", nil)
+                                                message:NSLocalizedString(@"願意協助改善xxx嗎？", nil)
+                                                delegate:self
+                                                cancelButtonTitle:NSLocalizedString(@"願意", nil)
+                                                otherButtonTitles: NSLocalizedString(@"不願意", nil),nil];
+        [alert show];
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"CrashStatus"];
+    [[NSUserDefaults standardUserDefaults]synchronize];
+    
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
